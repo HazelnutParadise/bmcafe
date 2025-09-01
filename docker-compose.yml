@@ -1,0 +1,29 @@
+services:
+  ghost:
+    image: ghost:latest
+    container_name: bmcafe-ghost
+    restart: unless-stopped
+    ports:
+      - 8100:2368
+    environment:
+      url: https://bmcafe.hazelnut-paradise.com
+      database__client: mysql
+      database__connection__host: mysql
+      database__connection__user: ghost_user
+      database__connection__password: ghost_password
+      database__connection__database: ghost_db
+    volumes:
+      - /mnt/hdd0/bmcafe/ghost/content:/var/lib/ghost/content
+
+  mysql:
+    image: mysql:8
+    container_name: bmcafe-ghost-mysql
+    restart: unless-stopped
+    environment:
+      MYSQL_ROOT_PASSWORD: root_password
+      MYSQL_DATABASE: ghost_db
+      MYSQL_USER: ghost_user
+      MYSQL_PASSWORD: ghost_password
+    volumes:
+      - /mnt/hdd0/bmcafe/mysql:/var/lib/mysql
+

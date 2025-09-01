@@ -1,0 +1,51 @@
+<div id="div-onead-nd-01"></div>
+<script type="text/javascript">
+  var custom_call = function (params) {
+      if (params.hasAd) {
+        console.log('ND has AD')
+      } else {
+        console.log('ND AD Empty');
+      }
+    }
+  ONEAD_TEXT = {};
+  ONEAD_TEXT.pub = {};
+  ONEAD_TEXT.pub.uid = "2000180";
+  ONEAD_TEXT.pub.slotobj = document.getElementById("div-onead-nd-01");
+  ONEAD_TEXT.pub.player_mode = "native-drive";
+  ONEAD_TEXT.pub.player_mode_div = "div-onead-ad";
+  ONEAD_TEXT.pub.max_threads = 3;
+  ONEAD_TEXT.pub.position_id = /Mobi|Android|iPhone|iPad|iPod/i.test(navigator.userAgent)? "5" : "0";
+  ONEAD_TEXT.pub.queryAdCallback = custom_call;
+  window.ONEAD_text_pubs = window.ONEAD_text_pubs || [];
+  ONEAD_text_pubs.push(ONEAD_TEXT);
+</script>
+<script src="https://ad-specs.guoshipartners.com/static/js/ad-serv.min.js"></script>
+
+<footer class="custom-footer">
+  <div id="navbar-placeholder"></div>
+  <br>
+  <div class="copyright">
+    BM Café 商管咖啡廳 © 2025 榛果繽紛樂
+  </div>
+</footer>
+<script src="https://src.hazelnut-paradise.com/utils.js"></script>
+<script>
+  getNavbar()
+</script>
+<style>
+  footer {
+    display: none;
+  }
+  .custom-footer {
+    display: block;
+    margin-top: 50px;
+    padding-top: 10px;
+    padding-bottom: 50px;
+    background-color: black;
+  }
+  .copyright {
+    text-align: center;
+    color: white;
+    font-size: 16px;
+  }
+</style>

@@ -1,0 +1,590 @@
+{
+  "name": "bmcafe",
+  "nodes": [
+    {
+      "parameters": {
+        "url": "http://feeds.harvardbusiness.org/harvardbusiness/",
+        "options": {}
+      },
+      "name": "Fetch HBR RSS",
+      "type": "n8n-nodes-base.rssFeedRead",
+      "typeVersion": 1,
+      "position": [
+        -400,
+        220
+      ],
+      "id": "bcc0c6ae-587b-4c4d-bc64-cac73aa9f724",
+      "retryOnFail": true,
+      "waitBetweenTries": 5000
+    },
+    {
+      "parameters": {
+        "model": "gemma3:12b",
+        "options": {
+          "numPredict": -1,
+          "format": "default"
+        }
+      },
+      "type": "@n8n/n8n-nodes-langchain.lmChatOllama",
+      "typeVersion": 1,
+      "position": [
+        -120,
+        720
+      ],
+      "id": "a61778bf-3fd2-4396-ae49-785801778bd0",
+      "name": "Ollama Chat Model",
+      "credentials": {
+        "ollamaApi": {
+          "id": "GVWcKlrOev9vu9g5",
+          "name": "Ollama account"
+        }
+      }
+    },
+    {
+      "parameters": {},
+      "type": "n8n-nodes-base.manualTrigger",
+      "typeVersion": 1,
+      "position": [
+        -620,
+        200
+      ],
+      "id": "82094188-f5d9-41f0-b3d2-de768328d921",
+      "name": "When clicking ‘Test workflow’"
+    },
+    {
+      "parameters": {
+        "promptType": "define",
+        "text": "=原文內容如下：\n```\n{{ $json.cleanedArticle }}\n```\n\n你是一位專業且極具創意的專欄作家，擅長以日常生活場景（包含多元價值，可以有也可以沒有異國、新住民、原住民等元素，不僅限於食物）作為比喻，將專業內容轉化成生動故事。請根據下列原文內容進行原創改寫，而非僅作評論或統整。請遵照以下要求：\n\n1. 將原文內容改寫成一篇約 1500 字，多段的文章。\n2. 使用HTML語法，但只使用`<h3>`、`<p>`、`<strong>`、`<br>`、`<ul>`、`<ol>`、`<li>`，換行一律用`<br>`。\n3. 除了第一段，每段都要有段落標題，用`<h3>`，第一段不要有標題，開頭不要`<br>`。\n4. 文章內容必須以日常生活中的情境作為比喻，讓讀者彷彿在與朋友聊天般輕鬆有趣。\n5. 請假設讀者沒讀過原文，未來也不會讀。\n6. 用字需精準，專有名詞必須正確，避免產生翻譯或用詞錯誤。\n7. 文章必須只使用繁體中文，並貼近台灣人的用語習慣，避免出現翻譯腔。\n8. 請只輸出改寫後的文章內容，不要有文章標題，切勿包含任何額外的說明或文字。\n9. 自行決定所有細節，不要詢問我其他問題。",
+        "messages": {
+          "messageValues": [
+            {
+              "message": "使用繁體中文回答使用者。請完全依照使用者的命令，除了使用者的指示之外，不要加任何話。"
+            }
+          ]
+        }
+      },
+      "type": "@n8n/n8n-nodes-langchain.chainLlm",
+      "typeVersion": 1.6,
+      "position": [
+        -400,
+        540
+      ],
+      "id": "a845e13d-98e1-4088-bddf-e4d72aaf87bb",
+      "name": "生成文章",
+      "retryOnFail": true,
+      "waitBetweenTries": 5000
+    },
+    {
+      "parameters": {
+        "promptType": "define",
+        "text": "=文章內容：\n```\n{{ $json.text }}\n```\n原文標題：\n{{ $('取得最新那篇文章').item.json.title }}\n\n請幫我為以上文章擬定一個標題：\n規則：\n- 風格輕鬆有趣，但用詞要讓人看得懂\n- 字數不超過 25 字\n- 完全切合內容，要言之有物\n- 要像故事小本本的書名或網路懶人包標題\n- 不要太專業或太硬，也不要不知所云\n- 用繁體中文\n- 有利於SEO\n- 只輸出一個標題，不要有其他文字\n"
+      },
+      "type": "@n8n/n8n-nodes-langchain.chainLlm",
+      "typeVersion": 1.6,
+      "position": [
+        -120,
+        540
+      ],
+      "id": "d8f2c3ec-d694-4f65-bd0d-1e366713afdd",
+      "name": "生成標題",
+      "retryOnFail": true,
+      "waitBetweenTries": 5000
+    },
+    {
+      "parameters": {
+        "promptType": "define",
+        "text": "=文章標題：{{ $json.text }}\n文章內容：\n```\n{{ $('擷取文章內容').item.json.article }}\n```\n\n請根據以上文章內容，自動產生 2 個簡潔的主題標籤。\n每個標籤都請用繁體中文，每個不超過 5 個字，像社群貼文的 Hashtag。\n請以台灣讀者會熟悉的詞彙為主。\n輸出標籤就好，使用陣列表示，不要包含#，不要輸出其他東西。"
+      },
+      "type": "@n8n/n8n-nodes-langchain.chainLlm",
+      "typeVersion": 1.6,
+      "position": [
+        160,
+        540
+      ],
+      "id": "16a08eaf-9129-4d28-acde-639537bb7603",
+      "name": "生成標籤",
+      "retryOnFail": true,
+      "waitBetweenTries": 5000
+    },
+    {
+      "parameters": {
+        "jsCode": "// 只處理最新一篇（第一筆）\nconst latest = {\n  title:$('Loop Over Items').first().json.title,\n  link: $('Loop Over Items').first().json.link,\n}\n\nreturn [latest];\n"
+      },
+      "type": "n8n-nodes-base.code",
+      "typeVersion": 2,
+      "position": [
+        360,
+        100
+      ],
+      "id": "c3cdd9c3-3994-478e-acaa-664fb9831c59",
+      "name": "取得最新那篇文章"
+    },
+    {
+      "parameters": {
+        "resource": "Browser Rest Apis",
+        "operation": "Content",
+        "url": "={{ $json.link }}",
+        "waitForTimeout": 10000,
+        "setJavaScriptEnabled": false,
+        "requestOptions": {}
+      },
+      "type": "n8n-nodes-browserless.browserless",
+      "typeVersion": 2,
+      "position": [
+        480,
+        300
+      ],
+      "id": "0e4f59d8-8035-4e0b-9818-c998d4b5e3dc",
+      "name": "爬取文章",
+      "retryOnFail": true,
+      "waitBetweenTries": 5000,
+      "credentials": {
+        "browserlessApi": {
+          "id": "u2d4GG0Es1Cdyczh",
+          "name": "Browserless Credentials account"
+        }
+      }
+    },
+    {
+      "parameters": {
+        "operation": "extractHtmlContent",
+        "extractionValues": {
+          "values": [
+            {
+              "key": "article",
+              "cssSelector": "article",
+              "skipSelectors": "img, svg, #mobile-ad"
+            }
+          ]
+        },
+        "options": {}
+      },
+      "type": "n8n-nodes-base.html",
+      "typeVersion": 1.2,
+      "position": [
+        640,
+        300
+      ],
+      "id": "d5fe870e-b545-4831-89cf-1074303e1a3e",
+      "name": "擷取文章內容"
+    },
+    {
+      "parameters": {
+        "jsCode": "const cleanedArticle = $input.first().json.article.replace(/\\[.*?\\]/g, '');\n\n\nreturn {cleanedArticle};"
+      },
+      "type": "n8n-nodes-base.code",
+      "typeVersion": 2,
+      "position": [
+        800,
+        300
+      ],
+      "id": "67d19df1-d66a-4a6e-8885-66ddf2decbf0",
+      "name": "清除連結"
+    },
+    {
+      "parameters": {
+        "source": "adminApi",
+        "operation": "create",
+        "title": "={{ $('生成標題').item.json.text }}",
+        "content": "={{ $('生成文章').item.json.text }}\n<hr>\n<h2>原文<h2>\n<p>標題：<strong>{{ $('取得最新那篇文章').item.json.title }}</strong><br>\n網址：<a href=\"{{ $('取得最新那篇文章').item.json.link }}\">{{ $('取得最新那篇文章').item.json.link }}</a></p>",
+        "additionalFields": {
+          "status": "published",
+          "tags": "={{ $json.cleaned }}"
+        }
+      },
+      "type": "@vladoportos/n8n-nodes-ghostplus.ghostPlus",
+      "typeVersion": 1,
+      "position": [
+        560,
+        760
+      ],
+      "id": "42efd9e8-057a-47ef-89f0-491ef48a5d3f",
+      "name": "Ghost Plus",
+      "retryOnFail": true,
+      "waitBetweenTries": 5000,
+      "credentials": {
+        "ghostPlusAdminApi": {
+          "id": "dhlEeUNWM5ng4aig",
+          "name": "bmcafe Ghost Plus Admin account"
+        }
+      }
+    },
+    {
+      "parameters": {
+        "jsCode": "const raw = $('生成標籤').first().json.text;\nconst cleaned = JSON.parse(raw); // 轉成真正的陣列\n\nreturn {cleaned};"
+      },
+      "type": "n8n-nodes-base.code",
+      "typeVersion": 2,
+      "position": [
+        600,
+        540
+      ],
+      "id": "9cc96a53-59a4-45b4-899f-0dc2133d19b0",
+      "name": "標籤轉陣列"
+    },
+    {
+      "parameters": {
+        "conditions": {
+          "options": {
+            "caseSensitive": true,
+            "leftValue": "",
+            "typeValidation": "strict",
+            "version": 2
+          },
+          "conditions": [
+            {
+              "id": "0a586149-ff79-4dee-b052-6a33d183fbb1",
+              "leftValue": "={{ $json['COUNT(id)'] }}",
+              "rightValue": 0,
+              "operator": {
+                "type": "number",
+                "operation": "equals"
+              }
+            }
+          ],
+          "combinator": "and"
+        },
+        "options": {}
+      },
+      "type": "n8n-nodes-base.if",
+      "typeVersion": 2.2,
+      "position": [
+        200,
+        200
+      ],
+      "id": "30108036-2c9c-43f7-872d-734f4ff1e2f0",
+      "name": "If"
+    },
+    {
+      "parameters": {
+        "options": {
+          "reset": false
+        }
+      },
+      "type": "n8n-nodes-base.splitInBatches",
+      "typeVersion": 3,
+      "position": [
+        -220,
+        260
+      ],
+      "id": "a6a0581d-280c-4bb2-afd5-d2e79a62af70",
+      "name": "Loop Over Items"
+    },
+    {
+      "parameters": {
+        "operation": "executeQuery",
+        "query": "SELECT COUNT(id) FROM posted WHERE article_url = '{{ $json.link }}';",
+        "options": {}
+      },
+      "type": "n8n-nodes-base.mySql",
+      "typeVersion": 2.4,
+      "position": [
+        0,
+        220
+      ],
+      "id": "486f0d9b-0fb9-4378-b656-fe6e3b693dc0",
+      "name": "查詢是否發過",
+      "alwaysOutputData": true,
+      "retryOnFail": true,
+      "waitBetweenTries": 5000,
+      "credentials": {
+        "mySql": {
+          "id": "0spUKDb7NGmFOzB1",
+          "name": "bmcafe MySQL"
+        }
+      }
+    },
+    {
+      "parameters": {
+        "table": {
+          "__rl": true,
+          "value": "posted",
+          "mode": "name"
+        },
+        "dataMode": "defineBelow",
+        "valuesToSend": {
+          "values": [
+            {
+              "column": "article_url",
+              "value": "={{ $('取得最新那篇文章').item.json.link }}"
+            }
+          ]
+        },
+        "options": {}
+      },
+      "type": "n8n-nodes-base.mySql",
+      "typeVersion": 2.4,
+      "position": [
+        740,
+        760
+      ],
+      "id": "d1035e1e-68d5-45cb-b41a-23d1e33de02b",
+      "name": "將原文網址存進資料庫",
+      "retryOnFail": true,
+      "waitBetweenTries": 5000,
+      "credentials": {
+        "mySql": {
+          "id": "0spUKDb7NGmFOzB1",
+          "name": "bmcafe MySQL"
+        }
+      }
+    },
+    {
+      "parameters": {
+        "jsCode": "return {text: $('生成文章').first().json.text.replaceAll(\"\\n\", \"\")}"
+      },
+      "type": "n8n-nodes-base.code",
+      "typeVersion": 2,
+      "position": [
+        460,
+        540
+      ],
+      "id": "0afbfb4d-df16-405c-91f3-a338ebc22217",
+      "name": "清理內文"
+    },
+    {
+      "parameters": {
+        "rule": {
+          "interval": [
+            {
+              "triggerAtHour": 6
+            }
+          ]
+        }
+      },
+      "type": "n8n-nodes-base.scheduleTrigger",
+      "typeVersion": 1.2,
+      "position": [
+        -560,
+        60
+      ],
+      "id": "929208de-d153-43a5-8893-569582e1eb85",
+      "name": "Schedule Trigger"
+    }
+  ],
+  "pinData": {},
+  "connections": {
+    "Fetch HBR RSS": {
+      "main": [
+        [
+          {
+            "node": "Loop Over Items",
+            "type": "main",
+            "index": 0
+          }
+        ]
+      ]
+    },
+    "Ollama Chat Model": {
+      "ai_languageModel": [
+        [
+          {
+            "node": "生成文章",
+            "type": "ai_languageModel",
+            "index": 0
+          },
+          {
+            "node": "生成標題",
+            "type": "ai_languageModel",
+            "index": 0
+          },
+          {
+            "node": "生成標籤",
+            "type": "ai_languageModel",
+            "index": 0
+          }
+        ]
+      ]
+    },
+    "When clicking ‘Test workflow’": {
+      "main": [
+        [
+          {
+            "node": "Fetch HBR RSS",
+            "type": "main",
+            "index": 0
+          }
+        ]
+      ]
+    },
+    "生成文章": {
+      "main": [
+        [
+          {
+            "node": "生成標題",
+            "type": "main",
+            "index": 0
+          }
+        ]
+      ]
+    },
+    "生成標題": {
+      "main": [
+        [
+          {
+            "node": "生成標籤",
+            "type": "main",
+            "index": 0
+          }
+        ]
+      ]
+    },
+    "取得最新那篇文章": {
+      "main": [
+        [
+          {
+            "node": "爬取文章",
+            "type": "main",
+            "index": 0
+          }
+        ]
+      ]
+    },
+    "爬取文章": {
+      "main": [
+        [
+          {
+            "node": "擷取文章內容",
+            "type": "main",
+            "index": 0
+          }
+        ]
+      ]
+    },
+    "擷取文章內容": {
+      "main": [
+        [
+          {
+            "node": "清除連結",
+            "type": "main",
+            "index": 0
+          }
+        ]
+      ]
+    },
+    "清除連結": {
+      "main": [
+        [
+          {
+            "node": "生成文章",
+            "type": "main",
+            "index": 0
+          }
+        ]
+      ]
+    },
+    "生成標籤": {
+      "main": [
+        [
+          {
+            "node": "清理內文",
+            "type": "main",
+            "index": 0
+          }
+        ]
+      ]
+    },
+    "標籤轉陣列": {
+      "main": [
+        [
+          {
+            "node": "Ghost Plus",
+            "type": "main",
+            "index": 0
+          }
+        ]
+      ]
+    },
+    "Loop Over Items": {
+      "main": [
+        [
+          {
+            "node": "Fetch HBR RSS",
+            "type": "main",
+            "index": 0
+          }
+        ],
+        [
+          {
+            "node": "查詢是否發過",
+            "type": "main",
+            "index": 0
+          }
+        ]
+      ]
+    },
+    "If": {
+      "main": [
+        [
+          {
+            "node": "取得最新那篇文章",
+            "type": "main",
+            "index": 0
+          }
+        ],
+        [
+          {
+            "node": "Loop Over Items",
+            "type": "main",
+            "index": 0
+          }
+        ]
+      ]
+    },
+    "Ghost Plus": {
+      "main": [
+        [
+          {
+            "node": "將原文網址存進資料庫",
+            "type": "main",
+            "index": 0
+          }
+        ]
+      ]
+    },
+    "查詢是否發過": {
+      "main": [
+        [
+          {
+            "node": "If",
+            "type": "main",
+            "index": 0
+          }
+        ]
+      ]
+    },
+    "清理內文": {
+      "main": [
+        [
+          {
+            "node": "標籤轉陣列",
+            "type": "main",
+            "index": 0
+          }
+        ]
+      ]
+    },
+    "Schedule Trigger": {
+      "main": [
+        [
+          {
+            "node": "Fetch HBR RSS",
+            "type": "main",
+            "index": 0
+          }
+        ]
+      ]
+    }
+  },
+  "active": true,
+  "settings": {
+    "executionOrder": "v1"
+  },
+  "versionId": "cfdf9474-624a-471e-a71e-69fd8edaa981",
+  "meta": {
+    "templateCredsSetupCompleted": true,
+    "instanceId": "36ccb0e43f75073433febb369bed172cb86393e6cf4984116584babc3e84fa43"
+  },
+  "id": "qtfFLaASHqE5Gd8U",
+  "tags": []
+}
