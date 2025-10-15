@@ -11,7 +11,7 @@
       "typeVersion": 1,
       "position": [
         -400,
-        220
+        224
       ],
       "id": "bcc0c6ae-587b-4c4d-bc64-cac73aa9f724",
       "retryOnFail": true,
@@ -28,7 +28,7 @@
       "type": "@n8n/n8n-nodes-langchain.lmChatOllama",
       "typeVersion": 1,
       "position": [
-        -120,
+        -128,
         720
       ],
       "id": "a61778bf-3fd2-4396-ae49-785801778bd0",
@@ -45,8 +45,8 @@
       "type": "n8n-nodes-base.manualTrigger",
       "typeVersion": 1,
       "position": [
-        -620,
-        200
+        -624,
+        208
       ],
       "id": "82094188-f5d9-41f0-b3d2-de768328d921",
       "name": "When clicking ‘Test workflow’"
@@ -67,7 +67,7 @@
       "typeVersion": 1.6,
       "position": [
         -400,
-        540
+        544
       ],
       "id": "a845e13d-98e1-4088-bddf-e4d72aaf87bb",
       "name": "生成文章",
@@ -82,8 +82,8 @@
       "type": "@n8n/n8n-nodes-langchain.chainLlm",
       "typeVersion": 1.6,
       "position": [
-        -120,
-        540
+        -128,
+        544
       ],
       "id": "d8f2c3ec-d694-4f65-bd0d-1e366713afdd",
       "name": "生成標題",
@@ -99,7 +99,7 @@
       "typeVersion": 1.6,
       "position": [
         160,
-        540
+        544
       ],
       "id": "16a08eaf-9129-4d28-acde-639537bb7603",
       "name": "生成標籤",
@@ -113,8 +113,8 @@
       "type": "n8n-nodes-base.code",
       "typeVersion": 2,
       "position": [
-        360,
-        100
+        368,
+        112
       ],
       "id": "c3cdd9c3-3994-478e-acaa-664fb9831c59",
       "name": "取得最新那篇文章"
@@ -132,7 +132,7 @@
       "typeVersion": 2,
       "position": [
         480,
-        300
+        304
       ],
       "id": "0e4f59d8-8035-4e0b-9818-c998d4b5e3dc",
       "name": "爬取文章",
@@ -163,7 +163,7 @@
       "typeVersion": 1.2,
       "position": [
         640,
-        300
+        304
       ],
       "id": "d5fe870e-b545-4831-89cf-1074303e1a3e",
       "name": "擷取文章內容"
@@ -176,7 +176,7 @@
       "typeVersion": 2,
       "position": [
         800,
-        300
+        304
       ],
       "id": "67d19df1-d66a-4a6e-8885-66ddf2decbf0",
       "name": "清除連結"
@@ -196,7 +196,7 @@
       "typeVersion": 1,
       "position": [
         560,
-        760
+        768
       ],
       "id": "42efd9e8-057a-47ef-89f0-491ef48a5d3f",
       "name": "Ghost Plus",
@@ -216,8 +216,8 @@
       "type": "n8n-nodes-base.code",
       "typeVersion": 2,
       "position": [
-        600,
-        540
+        608,
+        544
       ],
       "id": "9cc96a53-59a4-45b4-899f-0dc2133d19b0",
       "name": "標籤轉陣列"
@@ -249,8 +249,8 @@
       "type": "n8n-nodes-base.if",
       "typeVersion": 2.2,
       "position": [
-        200,
-        200
+        208,
+        208
       ],
       "id": "30108036-2c9c-43f7-872d-734f4ff1e2f0",
       "name": "If"
@@ -264,8 +264,8 @@
       "type": "n8n-nodes-base.splitInBatches",
       "typeVersion": 3,
       "position": [
-        -220,
-        260
+        -224,
+        272
       ],
       "id": "a6a0581d-280c-4bb2-afd5-d2e79a62af70",
       "name": "Loop Over Items"
@@ -280,7 +280,7 @@
       "typeVersion": 2.4,
       "position": [
         0,
-        220
+        224
       ],
       "id": "486f0d9b-0fb9-4378-b656-fe6e3b693dc0",
       "name": "查詢是否發過",
@@ -315,8 +315,8 @@
       "type": "n8n-nodes-base.mySql",
       "typeVersion": 2.4,
       "position": [
-        740,
-        760
+        752,
+        768
       ],
       "id": "d1035e1e-68d5-45cb-b41a-23d1e33de02b",
       "name": "將原文網址存進資料庫",
@@ -336,8 +336,8 @@
       "type": "n8n-nodes-base.code",
       "typeVersion": 2,
       "position": [
-        460,
-        540
+        464,
+        544
       ],
       "id": "0afbfb4d-df16-405c-91f3-a338ebc22217",
       "name": "清理內文"
@@ -356,10 +356,13 @@
       "typeVersion": 1.2,
       "position": [
         -560,
-        60
+        64
       ],
       "id": "929208de-d153-43a5-8893-569582e1eb85",
-      "name": "Schedule Trigger"
+      "name": "Schedule Trigger",
+      "retryOnFail": true,
+      "waitBetweenTries": 5000,
+      "maxTries": 5
     }
   ],
   "pinData": {},
@@ -580,7 +583,7 @@
   "settings": {
     "executionOrder": "v1"
   },
-  "versionId": "cfdf9474-624a-471e-a71e-69fd8edaa981",
+  "versionId": "ad0f408c-6f33-47d2-8af1-ccc6e797f386",
   "meta": {
     "templateCredsSetupCompleted": true,
     "instanceId": "36ccb0e43f75073433febb369bed172cb86393e6cf4984116584babc3e84fa43"
