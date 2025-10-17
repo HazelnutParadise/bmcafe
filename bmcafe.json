@@ -331,7 +331,7 @@
     },
     {
       "parameters": {
-        "jsCode": "return {text: $('生成文章').first().json.text.replaceAll(\"\\n\", \"\")}"
+        "jsCode": "return {\n  text: $('生成文章')\n    .first()\n    .json.text\n    .replace(/<unused\\d+>\\\\n?/g, \"\") // 移除 <unused數字>\\n\n    .replace(/\\n/g, \"\")              // 移除一般換行\n    .trim()\n}\n"
       },
       "type": "n8n-nodes-base.code",
       "typeVersion": 2,
@@ -583,7 +583,7 @@
   "settings": {
     "executionOrder": "v1"
   },
-  "versionId": "ad0f408c-6f33-47d2-8af1-ccc6e797f386",
+  "versionId": "9e9469e8-9dfc-4714-869d-9785a2aa6a88",
   "meta": {
     "templateCredsSetupCompleted": true,
     "instanceId": "36ccb0e43f75073433febb369bed172cb86393e6cf4984116584babc3e84fa43"
