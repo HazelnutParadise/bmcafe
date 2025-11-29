@@ -93,7 +93,7 @@
     {
       "parameters": {
         "promptType": "define",
-        "text": "=文章標題：{{ $json.text }}\n文章內容：\n```\n{{ $('擷取文章內容').item.json.article }}\n```\n\n請根據以上文章內容，自動產生 2 個簡潔的主題標籤。\n每個標籤都請用繁體中文，每個不超過 5 個字，像社群貼文的 Hashtag。\n請以台灣讀者會熟悉的詞彙為主。\n輸出標籤就好，使用陣列表示，不要包含#，不要輸出其他東西。"
+        "text": "=文章標題：{{ $json.text }}\n文章內容：\n```\n{{ $('擷取文章內容').item.json.article }}\n```\n\n請根據以上文章內容，自動產生 2 個簡潔的主題標籤。\n每個標籤都請用繁體中文，每個不超過 5 個字，像社群貼文的 Hashtag。\n請以台灣讀者會熟悉的詞彙為主。\n輸出標籤就好，使用陣列表示，不要包含#，不要輸出其他東西。\n輸出格式如：[\"標籤一\", \"標籤二\"]"
       },
       "type": "@n8n/n8n-nodes-langchain.chainLlm",
       "typeVersion": 1.6,
@@ -581,9 +581,12 @@
   },
   "active": true,
   "settings": {
-    "executionOrder": "v1"
+    "executionOrder": "v1",
+    "callerPolicy": "workflowsFromSameOwner",
+    "availableInMCP": false,
+    "errorWorkflow": "9a8amJvReMQjFoX4"
   },
-  "versionId": "9e9469e8-9dfc-4714-869d-9785a2aa6a88",
+  "versionId": "aa2d4b7d-b752-44fb-bdeb-83c704c7d1c1",
   "meta": {
     "templateCredsSetupCompleted": true,
     "instanceId": "36ccb0e43f75073433febb369bed172cb86393e6cf4984116584babc3e84fa43"
