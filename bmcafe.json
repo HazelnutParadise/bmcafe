@@ -211,7 +211,7 @@
     },
     {
       "parameters": {
-        "jsCode": "const raw = $('生成標籤').first().json.text;\nconst cleaned = JSON.parse(raw); // 轉成真正的陣列\n\nreturn {cleaned};"
+        "jsCode": "const raw = $('生成標籤').first().json.text;\n\n// 抽出第一個 '[' 到最後一個 ']' 之間的內容\nconst match = raw.match(/\\[.*\\]/s);\n\nif (!match) {\n  throw new Error(\"找不到 JSON 陣列的中括號.\");\n}\n\nconst cleaned = JSON.parse(match[0]);\n\nreturn {\n  cleaned\n};\n"
       },
       "type": "n8n-nodes-base.code",
       "typeVersion": 2,
@@ -586,7 +586,7 @@
     "availableInMCP": false,
     "errorWorkflow": "9a8amJvReMQjFoX4"
   },
-  "versionId": "aa2d4b7d-b752-44fb-bdeb-83c704c7d1c1",
+  "versionId": "faf04462-fab0-44d3-b1ad-a3ce102dd1dc",
   "meta": {
     "templateCredsSetupCompleted": true,
     "instanceId": "36ccb0e43f75073433febb369bed172cb86393e6cf4984116584babc3e84fa43"
