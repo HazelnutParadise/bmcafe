@@ -186,7 +186,7 @@
         "source": "adminApi",
         "operation": "create",
         "title": "={{ $('生成標題').item.json.text }}",
-        "content": "={{ $('生成文章').item.json.text }}\n<hr>\n<h2>原文<h2>\n<p>標題：<strong>{{ $('取得最新那篇文章').item.json.title }}</strong><br>\n網址：<a href=\"{{ $('取得最新那篇文章').item.json.link }}\">{{ $('取得最新那篇文章').item.json.link }}</a></p>",
+        "content": "={{ $('清理內文').item.json.text }}\n<hr>\n<h2>原文<h2>\n<p>標題：<strong>{{ $('取得最新那篇文章').item.json.title }}</strong><br>\n網址：<a href=\"{{ $('取得最新那篇文章').item.json.link }}\">{{ $('取得最新那篇文章').item.json.link }}</a></p>",
         "additionalFields": {
           "status": "published",
           "tags": "={{ $json.cleaned }}"
@@ -583,10 +583,10 @@
   "settings": {
     "executionOrder": "v1",
     "callerPolicy": "workflowsFromSameOwner",
-    "availableInMCP": false,
+    "availableInMCP": true,
     "errorWorkflow": "9a8amJvReMQjFoX4"
   },
-  "versionId": "3c91e81a-eae4-4366-9b47-6c178a7d118e",
+  "versionId": "dfc5b14f-affc-420f-b17e-b13c7bae9645",
   "meta": {
     "templateCredsSetupCompleted": true,
     "instanceId": "36ccb0e43f75073433febb369bed172cb86393e6cf4984116584babc3e84fa43"
